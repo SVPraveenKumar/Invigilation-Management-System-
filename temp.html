@@ -1,0 +1,107 @@
+<html>
+
+<body>
+    <input id="dat" type="date">
+    <input type="button" onclick="func()">
+
+<button type="button" onclick="check()">Check</button>
+    
+
+</body>
+<script>
+    function func(){
+        var dat=document.getElementById("dat").value;
+        console.log(dat)
+        var a=new Date()
+        var b=new Date(dat)
+
+        var cur=new Date()
+        a.setMonth(a.getMonth()+4)
+        console.log(cur)
+        console.log(a)
+        if(cur.getTime()<b.getTime() && b.getTime()<a.getTime() ){
+            console.log("yes")
+        }
+        else{
+            alert("Invalid data")
+            location.reload();
+        }
+    }
+
+
+    </script>
+
+
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-analytics.js"></script>
+
+    <script>
+  
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+          apiKey: "AIzaSyAycwPm7q4Qy9U9C-tTRUqnLu4w-3qtQ1Y",
+          authDomain: "software-engineering-2020.firebaseapp.com",
+          databaseURL: "https://software-engineering-2020.firebaseio.com",
+          projectId: "software-engineering-2020",
+          storageBucket: "software-engineering-2020.appspot.com",
+          messagingSenderId: "775588245826",
+          appId: "1:775588245826:web:a0198d25050fe3ea9c58db",
+          measurementId: "G-KZCP8ZH04S"
+        };
+      var app= firebase.initializeApp(firebaseConfig);
+      var db = firebase.firestore(app);
+        // Initialize Firebase
+       
+       
+        firebase.analytics();
+      </script>
+
+      <script>
+          function check(){
+              var b=new Date()
+            db.collection("Exams").where("Date","<=",b).get().then(function(doc){
+            var i=0;
+            
+            doc.forEach(function(da){
+              var ttt= da.data();
+              console.log(da.id)
+
+                db.collection("Users").doc(ttt.faculty).get().then(function(doc){
+                    var t1=doc.data().exam
+                    console.log(t1)
+                    const index = t1.indexOf(da.id);
+                    
+                    t1.splice(index, 1);
+                    console.log(t1)
+
+                   /* db.collection("Users").doc(un).update({
+                        exam:t1
+                    })
+                    */
+
+                    
+                })
+
+
+
+            })
+
+            if(i==1){
+                console.log("yes")
+            }
+            else{
+                console.log("ok")
+            }
+
+
+
+        });
+
+    }
+      </script>
+</html>
